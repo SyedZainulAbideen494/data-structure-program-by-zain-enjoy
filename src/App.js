@@ -33,50 +33,92 @@ export default function BoredApp() {
   const [showStats, setShowStats] = useState(false);
   const [dsMsg, setDsMsg] = useState("");
   const [realityCheck, setRealityCheck] = useState(false);
-  
-  // New states to track button engagement
   const [hasClickedBigBtn, setHasClickedBigBtn] = useState(false);
   const [hasClickedDsBtn, setHasClickedDsBtn] = useState(false);
 
   const cycleMessage = (current, list, setter, trackSetter) => {
-    if (trackSetter) trackSetter(true); // Mark as clicked
+    if (trackSetter) trackSetter(true);
     const filtered = list.filter(m => m !== current);
     const randomItem = filtered[Math.floor(Math.random() * filtered.length)];
     setter(randomItem);
   };
 
+  // Styles Object
+  const styles = {
+    wrapper: {
+      minHeight: '100vh',
+      backgroundColor: '#FDFDFB',
+      color: '#121212',
+      fontFamily: 'sans-serif',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      padding: '64px 24px',
+    },
+    header: { textAlign: 'center', marginBottom: '64px' },
+    h1: { fontSize: '36px', fontWeight: '900', textTransform: 'uppercase', letterSpacing: '-0.02em', margin: 0 },
+    sub: { fontSize: '12px', fontWeight: '500', color: '#9ca3af', letterSpacing: '0.2em', textTransform: 'uppercase' },
+    main: { width: '100%', maxWidth: '384px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '48px' },
+    bigBtn: {
+      width: '176px', height: '176px', borderRadius: '50%', backgroundColor: 'white',
+      border: '6px solid #121212', boxShadow: '8px 8px 0px 0px #121212',
+      fontSize: '24px', fontWeight: '900', fontStyle: 'italic', cursor: 'pointer',
+      display: 'flex', alignItems: 'center', justifyCenter: 'center'
+    },
+    msgBox: {
+      marginTop: '32px', padding: '20px', backgroundColor: 'white', border: '2px solid #121212',
+      borderRadius: '12px', boxShadow: '4px 4px 0px 0px #121212', textAlign: 'center', fontWeight: 'bold'
+    },
+    statsToggle: {
+      background: 'none', border: 'none', fontSize: '10px', fontWeight: '900',
+      textTransform: 'uppercase', letterSpacing: '0.2em', color: '#9ca3af', cursor: 'pointer', padding: '8px'
+    },
+    statsCard: {
+      width: '100%', marginTop: '16px', backgroundColor: '#121212', color: 'white',
+      padding: '24px', borderRadius: '16px', display: 'flex', flexDirection: 'column', gap: '24px'
+    },
+    progressBar: { height: '8px', width: '100%', backgroundColor: '#1f2937', borderRadius: '999px', overflow: 'hidden' },
+    dsBtn: {
+      width: '100%', padding: '16px', backgroundColor: 'white', border: '2px solid #121212',
+      fontWeight: '900', textTransform: 'uppercase', fontSize: '12px', letterSpacing: '0.1em', cursor: 'pointer'
+    },
+    dsMsg: {
+      marginTop: '12px', padding: '16px', backgroundColor: '#fef2f2', border: '1px solid #fecaca',
+      color: '#7f1d1d', fontSize: '12px', fontWeight: '700', borderRadius: '8px', textAlign: 'center'
+    },
+    realityBox: {
+      textAlign: 'center', padding: '32px 24px', backgroundColor: '#fef2f2', border: '2px solid #dc2626',
+      borderRadius: '16px'
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-[#FDFDFB] text-[#121212] font-sans selection:bg-indigo-100 flex flex-col items-center px-6 py-16">
-      
-      <header className="text-center mb-16 space-y-2">
-        <h1 className="text-4xl font-black tracking-tight uppercase">Bored in College?</h1>
-        <p className="text-sm font-medium text-gray-400 tracking-widest uppercase">A scientifically useless experience.</p>
+    <div style={styles.wrapper}>
+      <header style={styles.header}>
+        <h1 style={styles.h1}>Bored in College?</h1>
+        <p style={styles.sub}>A scientifically useless experience.</p>
       </header>
 
-      <main className="w-full max-w-sm flex flex-col items-center space-y-12">
-        
-        {/* THE BIG BUTTON */}
-        <div className="relative group w-full flex flex-col items-center">
+      <main style={styles.main}>
+        {/* BIG BUTTON */}
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
           <motion.button
             onClick={() => cycleMessage(chaosMsg, MESSAGES, setChaosMsg, setHasClickedBigBtn)}
+            style={styles.bigBtn}
             animate={{ y: [0, -5, 0] }}
-            transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
+            transition={{ repeat: Infinity, duration: 3 }}
             whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95, rotate: [0, -2, 2, 0] }}
-            className="w-44 h-44 rounded-full bg-white border-[6px] border-[#121212] shadow-[8px_8px_0px_0px_rgba(18,18,18,1)] flex items-center justify-center text-2xl font-black italic tracking-tighter hover:bg-indigo-50 transition-colors"
+            whileTap={{ scale: 0.95 }}
           >
-            {/* UPDATED LABEL */}
-            {hasClickedBigBtn ? "CLICK AGAIN" : "CLICK"}
+            <span style={{width: '100%'}}>{hasClickedBigBtn ? "CLICK AGAIN" : "CLICK"}</span>
           </motion.button>
 
           <AnimatePresence mode="wait">
             {chaosMsg && (
               <motion.div 
                 key={chaosMsg}
-                initial={{ opacity: 0, scale: 0.8, y: 10 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.8, y: -10 }}
-                className="mt-8 p-5 bg-white border-2 border-[#121212] rounded-xl shadow-[4px_4px_0px_0px_rgba(18,18,18,1)] text-center font-bold"
+                initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}
+                style={styles.msgBox}
               >
                 "{chaosMsg}"
               </motion.div>
@@ -84,116 +126,68 @@ export default function BoredApp() {
           </AnimatePresence>
         </div>
 
-        {/* SECTION 2: STATS */}
-        <div className="w-full flex flex-col items-center">
-          <button 
-            onClick={() => setShowStats(!showStats)}
-            className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 hover:text-indigo-600 transition-colors py-2"
-          >
+        {/* STATS SECTION */}
+        <div style={{ width: '100%', textAlign: 'center' }}>
+          <button onClick={() => setShowStats(!showStats)} style={styles.statsToggle}>
             {showStats ? "[ Close Classified Data ]" : "[ View My Stats ]"}
           </button>
-
           <AnimatePresence>
             {showStats && (
               <motion.section 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 20 }}
-                className="w-full mt-4 bg-[#121212] text-white p-6 rounded-2xl space-y-6 shadow-2xl"
+                initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }}
+                style={styles.statsCard}
               >
                 {STATS.map((stat) => (
-                  <div key={stat.label} className="space-y-2">
-                    <div className="flex justify-between items-end">
-                      <span className="text-[10px] font-bold uppercase text-indigo-400">{stat.label}</span>
-                      <span className="text-xs font-mono">{stat.value}</span>
+                  <div key={stat.label}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '10px', color: '#818cf8', fontWeight: 'bold' }}>
+                      <span>{stat.label}</span>
+                      <span>{stat.value}</span>
                     </div>
-                    <div className="h-2 w-full bg-gray-800 rounded-full overflow-hidden">
+                    <div style={styles.progressBar}>
                       <motion.div 
-                        initial={{ width: 0 }}
-                        animate={{ width: stat.width }}
-                        className="h-full bg-white"
-                        transition={{ duration: 1.2, ease: "circOut" }}
+                        initial={{ width: 0 }} animate={{ width: stat.width }}
+                        style={{ height: '100%', backgroundColor: 'white' }}
                       />
                     </div>
-                    <p className="text-[10px] italic text-gray-500">{stat.note}</p>
+                    <p style={{ fontSize: '10px', color: '#6b7280', margin: '4px 0 0' }}>{stat.note}</p>
                   </div>
                 ))}
-                <div className="pt-4 border-t border-gray-800 text-center">
-                  <span className="text-[9px] text-gray-600 uppercase tracking-tighter">System generated roast • Refresh for nothing</span>
-                </div>
               </motion.section>
             )}
           </AnimatePresence>
         </div>
 
-        {/* SECTION 3: THE TRAP (DS ROASTS) */}
-        <div className="w-full">
+        {/* DS ROAST SECTION */}
+        <div style={{ width: '100%' }}>
           <button 
             onClick={() => cycleMessage(dsMsg, DS_ROASTS, setDsMsg, setHasClickedDsBtn)}
-            className="w-full py-4 bg-white border-2 border-[#121212] font-black uppercase text-xs tracking-widest hover:bg-black hover:text-white transition-all active:translate-y-1"
+            style={styles.dsBtn}
           >
-            {/* UPDATED LABEL */}
             {hasClickedDsBtn ? "Ok sry, click again for code" : "Tomorrow’s DS Program"}
           </button>
-          
           <AnimatePresence mode="wait">
             {dsMsg && (
-              <motion.div 
-                key={dsMsg}
-                initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: 10 }}
-                className="mt-3 p-4 bg-red-50 border border-red-200 text-red-900 text-xs font-bold rounded-lg text-center"
-              >
+              <motion.div key={dsMsg} initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={styles.dsMsg}>
                 {dsMsg}
               </motion.div>
             )}
           </AnimatePresence>
         </div>
 
-        {/* SECTION 4: REALITY CHECK */}
-        <div className="pt-12 pb-20 w-full flex flex-col items-center">
+        {/* REALITY CHECK */}
+        <div style={{ paddingBottom: '80px', width: '100%' }}>
           {!realityCheck ? (
-            <motion.button 
-              onClick={() => setRealityCheck(true)}
-              whileHover={{ scale: 1.05 }}
-              className="group relative flex flex-col items-center p-4"
-            >
-              <span className="text-[11px] font-bold uppercase tracking-[0.3em] text-gray-400 group-hover:text-red-500 transition-colors duration-300">
-                Click here
-              </span>
-              <div className="mt-2 relative w-12 h-[2px] bg-gray-200 overflow-hidden">
-                <motion.div 
-                  initial={{ x: "-100%" }}
-                  whileHover={{ x: "100%" }}
-                  transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
-                  className="absolute inset-0 bg-red-500"
-                />
-              </div>
-              <span className="absolute -bottom-2 opacity-0 group-hover:opacity-100 group-hover:bottom-[-12px] text-[8px] text-gray-400 transition-all duration-500 italic">
-                (don't do it)
-              </span>
-            </motion.button>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', cursor: 'pointer' }} onClick={() => setRealityCheck(true)}>
+              <span style={{ fontSize: '11px', fontWeight: 'bold', color: '#9ca3af', letterSpacing: '3px' }}>CLICK HERE</span>
+              <div style={{ width: '48px', height: '2px', backgroundColor: '#e5e7eb', marginTop: '8px' }} />
+            </div>
           ) : (
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="text-center px-6 py-8 bg-red-50 border-2 border-red-600 rounded-2xl"
-            >
-              <h2 className="text-3xl font-black uppercase tracking-tighter text-red-600 mb-2">
-                Go study for your DS exam.
-              </h2>
-              <p className="text-lg font-bold text-red-900">Dude wtf. Lazy kid.</p>
-              <p className="text-xs text-red-400 mt-6 font-medium tracking-tight">
-                This site cannot save your GPA. Only effort can.
-              </p>
-              
+            <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} style={styles.realityBox}>
+              <h2 style={{ margin: 0, fontSize: '28px', color: '#dc2626', fontWeight: '900' }}>GO STUDY.</h2>
+              <p style={{ fontWeight: 'bold', color: '#7f1d1d' }}>Lazy kid.</p>
               <button 
-                onClick={() => {
-                    setRealityCheck(false);
-                    setHasClickedDsBtn(false); // Reset this for extra annoyance
-                }}
-                className="mt-6 text-[10px] uppercase tracking-widest font-bold text-red-600 underline underline-offset-4 opacity-50 hover:opacity-100"
+                onClick={() => { setRealityCheck(false); setHasClickedDsBtn(false); }}
+                style={{ background: 'none', border: 'none', textDecoration: 'underline', color: '#dc2626', fontSize: '10px', cursor: 'pointer', marginTop: '20px' }}
               >
                 I'm sorry, take me back
               </button>
