@@ -1,3 +1,6 @@
-content: [
-  "./src/**/*.{js,jsx,ts,tsx}",
-]
+module.exports = {
+  plugins: {
+    '@tailwindcss/postcss': {},
+    autoprefixer: {},
+  }
+}
